@@ -46,10 +46,10 @@ export function GeometryOperations({
   }
 
   return (
-    <section>
+    <section className="panel">
       <h2>3. Composer</h2>
-      <div>
-        <label htmlFor="geometry-operation">
+      <div className="operation-row">
+        <label className="sr-only" htmlFor="geometry-operation">
           Opération géométrique
         </label>
         <select
@@ -64,6 +64,7 @@ export function GeometryOperations({
           <option value="difference">Soustraction</option>
         </select>
         <button
+          className="primary"
           type="button"
           onClick={runOperation}
           disabled={selectedIds.length < 2}
@@ -71,12 +72,13 @@ export function GeometryOperations({
           Calculer
         </button>
       </div>
-      <p>
+      <p className="hint">
         La soustraction retire les géométries suivantes de la première
         sélectionnée.
       </p>
       {result && (
         <button
+          className="secondary"
           type="button"
           onClick={() => onResult(null)}
         >

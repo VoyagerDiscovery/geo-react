@@ -1,121 +1,92 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
-import "./App.css";
+import { useRef, useState } from "react";
+import type { Feature } from "geojson";
+import { GeoJsonImport } from "./features/geojson-import/GeoJsonImport";
+import { GeometryList } from "./features/geometry-list/GeometryList";
+import { GeometryMap } from "./features/map/GeometryMap";
+import { GeometryOperations } from "./features/geometry-operations/GeometryOperations";
+import type { StoredGeometry } from "./types/geometry";
+
+const COLOR_COUNT = 6;
 
 function App() {
-  const [count, setCount] = useState(0);
+  const nextColorIndex = useRef(0);
+  const [items, setItems] = useState<StoredGeometry[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [result, setResult] = useState<Feature | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  function addFeatures(features: Feature[], sourceName = "Géométrie") {
+    const newItems = features.map((item, index) => {
+      const propertyName =
+        typeof item.properties?.name === "string" ? item.properties.name : null;
+      const colorIndex = nextColorIndex.current % COLOR_COUNT;
+      nextColorIndex.current += 1;
+
+      return {
+        id: crypto.randomUUID(),
+        name: propertyName?.trim() || `${sourceName} ${index + 1}`,
+        colorIndex,
+        feature: item,
+      };
+    });
+
+    setItems((current) => [...current, ...newItems]);
+    setResult(null);
+    setMessage(
+      `${newItems.length} géométrie${newItems.length > 1 ? "s" : ""} ajoutée${newItems.length > 1 ? "s" : ""}.`,
+    );
+  }
+
+  function toggleSelection(id: string) {
+    setSelectedIds((current) =>
+      current.includes(id)
+        ? current.filter((itemId) => itemId !== id)
+        : [...current, id],
+    );
+    setResult(null);
+  }
+
+  function removeItem(id: string) {
+    setItems((current) => current.filter((item) => item.id !== id));
+    setSelectedIds((current) => current.filter((itemId) => itemId !== id));
+    setResult(null);
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+    <main className="app-shell">
+      <aside className="sidebar">
+        <header>
+          <p className="eyebrow">Air Navigation SA · Projet technique</p>
+          <h1>Geo Composer</h1>
+          <p className="intro">
+            Importez, comparez et combinez des géométries GeoJSON.
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        </header>
 
-      <div className="ticks"></div>
+        <GeoJsonImport onImport={addFeatures} onMessage={setMessage} />
+        <GeometryList
+          items={items}
+          selectedIds={selectedIds}
+          onToggle={toggleSelection}
+          onRemove={removeItem}
+        />
+        <GeometryOperations
+          items={items}
+          selectedIds={selectedIds}
+          result={result}
+          onResult={setResult}
+          onMessage={setMessage}
+        />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {message && (
+          <div className="status" role="status">
+            {message}
+          </div>
+        )}
+      </aside>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <GeometryMap items={items} result={result} />
+    </main>
   );
 }
 
