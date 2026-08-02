@@ -53,8 +53,8 @@ export function GeometryMap({ items, result }: Props) {
   );
 
   return (
-    <section aria-labelledby="map-title">
-      <h2 id="map-title">
+    <section className="map-area" aria-labelledby="map-title">
+      <h2 id="map-title" className="sr-only">
         Carte des géométries
       </h2>
       <MapContainer center={[46.8, 8.23]} zoom={8} zoomControl>
@@ -79,8 +79,8 @@ export function GeometryMap({ items, result }: Props) {
         <FitMapToData data={displayedData} />
       </MapContainer>
       {result && (
-        <div>
-          <span aria-hidden="true" />
+        <div className="map-legend">
+          <span className="result-swatch" aria-hidden="true" />
           Résultat de l'opération
         </div>
       )}
