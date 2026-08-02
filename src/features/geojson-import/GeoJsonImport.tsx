@@ -43,9 +43,9 @@ export function GeoJsonImport({ onImport, onMessage }: Props) {
   }
 
   return (
-    <section>
+    <section className="panel">
       <h2>1. Importer</h2>
-      <label>
+      <label className="file-input">
         Choisir un fichier
         <input
           type="file"
@@ -56,7 +56,7 @@ export function GeoJsonImport({ onImport, onMessage }: Props) {
           }}
         />
       </label>
-      <div>
+      <div className="separator">
         <span>ou coller du GeoJSON</span>
       </div>
       <textarea
@@ -66,7 +66,7 @@ export function GeoJsonImport({ onImport, onMessage }: Props) {
         placeholder='{"type":"Feature","geometry":{...}}'
         aria-label="Contenu GeoJSON à importer"
       />
-      <button type="button" onClick={importText}>
+      <button className="primary" type="button" onClick={importText}>
         Ajouter à la carte
       </button>
     </section>
