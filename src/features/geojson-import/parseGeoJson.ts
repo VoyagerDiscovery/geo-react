@@ -120,7 +120,7 @@ function validateGeometry(value: unknown, context: string): Geometry {
 
 function validateFeature(value: unknown, context: string): Feature {
   if (!isObject(value) || value.type !== "Feature") {
-    throw new Error(`${context} n\'est pas une Feature GeoJSON.`);
+    throw new Error(`${context} n'est pas une Feature GeoJSON.`);
   }
   if (value.properties !== null && !isObject(value.properties)) {
     throw new Error(`${context}.properties doit être un objet ou null.`);

@@ -30,7 +30,7 @@ export function GeometryOperations({
 
       if (!computed) {
         onResult(null);
-        onMessage("L\'opération ne produit aucune géométrie.");
+        onMessage("L'opération ne produit aucune géométrie.");
         return;
       }
 
@@ -40,7 +40,7 @@ export function GeometryOperations({
     } catch (error) {
       onResult(null);
       onMessage(
-        error instanceof Error ? error.message : "L\'opération a échoué.",
+        error instanceof Error ? error.message : "L'opération a échoué.",
       );
     }
   }

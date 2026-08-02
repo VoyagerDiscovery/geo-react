@@ -15,7 +15,7 @@ export function GeoJsonImport({ onImport, onMessage }: Props) {
   function importText() {
     try {
       if (!textValue.trim()) {
-        throw new Error("Collez d\'abord un objet GeoJSON.");
+        throw new Error("Collez d'abord un objet GeoJSON.");
       }
       onImport(parseGeoJson(textValue));
       setTextValue("");
