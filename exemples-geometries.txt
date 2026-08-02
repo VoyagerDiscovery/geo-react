@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Zone bleue"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [7.40, 46.93],
+            [7.48, 46.93],
+            [7.48, 46.98],
+            [7.40, 46.98],
+            [7.40, 46.93]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Zone rouge"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [7.44, 46.95],
+            [7.52, 46.95],
+            [7.52, 47.00],
+            [7.44, 47.00],
+            [7.44, 46.95]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Zone verte"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [7.43, 46.91],
+            [7.50, 46.94],
+            [7.46, 46.99],
+            [7.39, 46.96],
+            [7.43, 46.91]
+          ]
+        ]
+      }
+    }
+  ]
+}
