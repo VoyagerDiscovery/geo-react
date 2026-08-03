@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import type { ReactElement } from "react";
 import type { Feature } from "geojson";
 import { GeoJsonImport } from "./features/geojson-import/GeoJsonImport";
 import { GeometryList } from "./features/geometry-list/GeometryList";
@@ -6,16 +7,29 @@ import { GeometryMap } from "./features/map/GeometryMap";
 import { GeometryOperations } from "./features/geometry-operations/GeometryOperations";
 import type { StoredGeometry } from "./types/geometry";
 
+/** Number of available geometry colors. */
 const COLOR_COUNT = 6;
 
-function App() {
+/**
+ * Coordinates shared state and application features.
+ *
+ * @returns Application interface.
+ */
+function App(): ReactElement {
   const nextColorIndex = useRef(0);
   const [items, setItems] = useState<StoredGeometry[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [result, setResult] = useState<Feature | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  function addFeatures(features: Feature[], sourceName = "Géométrie") {
+  /**
+   * Adds validated features to the workspace.
+   *
+   * @param features Validated GeoJSON features.
+   * @param sourceName Fallback feature name.
+   * @returns Nothing.
+   */
+  function addFeatures(features: Feature[], sourceName = "Géométrie"): void {
     const newItems = features.map((item, index) => {
       const propertyName =
         typeof item.properties?.name === "string" ? item.properties.name : null;
@@ -37,7 +51,13 @@ function App() {
     );
   }
 
-  function toggleSelection(id: string) {
+  /**
+   * Toggles one geometry selection.
+   *
+   * @param id Geometry identifier.
+   * @returns Nothing.
+   */
+  function toggleSelection(id: string): void {
     setSelectedIds((current) =>
       current.includes(id)
         ? current.filter((itemId) => itemId !== id)
@@ -46,7 +66,13 @@ function App() {
     setResult(null);
   }
 
-  function removeItem(id: string) {
+  /**
+   * Removes one geometry and invalidates related state.
+   *
+   * @param id Geometry identifier.
+   * @returns Nothing.
+   */
+  function removeItem(id: string): void {
     setItems((current) => current.filter((item) => item.id !== id));
     setSelectedIds((current) => current.filter((itemId) => itemId !== id));
     setResult(null);

@@ -1,18 +1,26 @@
 import type { StoredGeometry } from "../../types/geometry";
+import type { ReactElement } from "react";
 
+/** Defines geometry list properties. */
 type Props = {
+  /** Geometries available for display. */
   items: StoredGeometry[];
+  /** Currently selected geometry identifiers. */
   selectedIds: string[];
+  /** Toggles one geometry identifier. */
   onToggle: (id: string) => void;
+  /** Removes one geometry identifier. */
   onRemove: (id: string) => void;
 };
 
-export function GeometryList({
-  items,
-  selectedIds,
-  onToggle,
-  onRemove,
-}: Props) {
+/**
+ * Displays geometry selection and removal controls.
+ *
+ * @param props Geometry list data and callbacks.
+ * @returns Geometry list panel.
+ */
+export function GeometryList(props: Props): ReactElement {
+  const { items, selectedIds, onToggle, onRemove } = props;
   return (
     <section className="panel geometry-panel">
       <div className="section-title">

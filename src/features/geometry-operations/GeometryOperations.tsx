@@ -1,26 +1,39 @@
 import { useState } from "react";
+import type { ReactElement } from "react";
 import type { Feature } from "geojson";
 import type { GeometryOperation, StoredGeometry } from "../../types/geometry";
 import { calculateGeometry } from "./calculateGeometry";
 
+/** Defines geometry operation panel properties. */
 type Props = {
+  /** Geometries available for calculations. */
   items: StoredGeometry[];
+  /** Ordered selected geometry identifiers. */
   selectedIds: string[];
+  /** Current computed result. */
   result: Feature | null;
+  /** Updates the computed result. */
   onResult: (result: Feature | null) => void;
+  /** Publishes user feedback. */
   onMessage: (message: string) => void;
 };
 
-export function GeometryOperations({
-  items,
-  selectedIds,
-  result,
-  onResult,
-  onMessage,
-}: Props) {
+/**
+ * Runs geometry operations on selected features.
+ *
+ * @param props Operation data and callbacks.
+ * @returns Operation panel.
+ */
+export function GeometryOperations(props: Props): ReactElement {
+  const { items, selectedIds, result, onResult, onMessage } = props;
   const [operation, setOperation] = useState<GeometryOperation>("union");
 
-  function runOperation() {
+  /**
+   * Computes and publishes the selected operation.
+   *
+   * @returns Nothing.
+   */
+  function runOperation(): void {
     try {
       const selectedFeatures = selectedIds.flatMap((id) => {
         const item = items.find((geometry) => geometry.id === id);

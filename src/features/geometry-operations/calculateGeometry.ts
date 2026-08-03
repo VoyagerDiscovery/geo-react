@@ -2,6 +2,13 @@ import { difference, featureCollection, intersect, union } from "@turf/turf";
 import type { Feature } from "geojson";
 import type { GeometryOperation, PolygonFeature } from "../../types/geometry";
 
+/**
+ * Narrows a feature to a polygon feature.
+ *
+ * @param featureItem Feature to inspect.
+ * @returns Polygon feature.
+ * @throws When geometry is not polygonal.
+ */
 function asPolygon(featureItem: Feature): PolygonFeature {
   const type = featureItem.geometry?.type;
 
@@ -14,6 +21,14 @@ function asPolygon(featureItem: Feature): PolygonFeature {
   return featureItem as PolygonFeature;
 }
 
+/**
+ * Executes a Turf operation on polygon features.
+ *
+ * @param features Selected features.
+ * @param operation Requested operation.
+ * @returns Computed geometry or empty result.
+ * @throws When selection is insufficient or non-polygonal.
+ */
 export function calculateGeometry(
   features: Feature[],
   operation: GeometryOperation,

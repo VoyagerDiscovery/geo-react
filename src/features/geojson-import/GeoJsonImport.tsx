@@ -1,18 +1,35 @@
 import { useState } from "react";
+import type { ReactElement } from "react";
 import type { Feature } from "geojson";
 import { parseGeoJson } from "./parseGeoJson";
 
+/** Defines GeoJSON import component properties. */
 type Props = {
+  /** Sends validated features to the parent. */
   onImport: (features: Feature[], sourceName?: string) => void;
+  /** Publishes user feedback. */
   onMessage: (message: string) => void;
 };
 
+/** Maximum accepted file size in bytes. */
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-export function GeoJsonImport({ onImport, onMessage }: Props) {
+/**
+ * Imports GeoJSON from files or text.
+ *
+ * @param props Import callbacks.
+ * @returns Import panel.
+ */
+export function GeoJsonImport(props: Props): ReactElement {
+  const { onImport, onMessage } = props;
   const [textValue, setTextValue] = useState("");
 
-  function importText() {
+  /**
+   * Imports the current text value.
+   *
+   * @returns Nothing.
+   */
+  function importText(): void {
     try {
       if (!textValue.trim()) {
         throw new Error("Collez d'abord un objet GeoJSON.");
@@ -24,7 +41,13 @@ export function GeoJsonImport({ onImport, onMessage }: Props) {
     }
   }
 
-  async function importFile(file: File | undefined) {
+  /**
+   * Reads and imports one local file.
+   *
+   * @param file Selected browser file.
+   * @returns Completion promise.
+   */
+  async function importFile(file: File | undefined): Promise<void> {
     if (!file) return;
 
     try {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import type { ReactElement } from "react";
 import { featureCollection } from "@turf/turf";
 import type { Feature, FeatureCollection } from "geojson";
 import L from "leaflet";
@@ -6,6 +7,7 @@ import { GeoJSON, MapContainer, TileLayer, useMap } from "react-leaflet";
 import type { PathOptions } from "leaflet";
 import type { StoredGeometry } from "../../types/geometry";
 
+/** Source geometry layer styles. */
 const LAYER_STYLES: PathOptions[] = [
   { color: "#2563eb", weight: 3, fillOpacity: 0.25 },
   { color: "#dc2626", weight: 3, fillOpacity: 0.25 },
@@ -15,6 +17,7 @@ const LAYER_STYLES: PathOptions[] = [
   { color: "#0891b2", weight: 3, fillOpacity: 0.25 },
 ];
 
+/** Computed result layer style. */
 const RESULT_STYLE: PathOptions = {
   color: "#111827",
   weight: 4,
@@ -23,7 +26,14 @@ const RESULT_STYLE: PathOptions = {
   dashArray: "7 5",
 };
 
-function FitMapToData({ data }: { data: FeatureCollection }) {
+/**
+ * Fits the map around supplied features.
+ *
+ * @param props Features to display.
+ * @returns No rendered element.
+ */
+function FitMapToData(props: { data: FeatureCollection }): null {
+  const { data } = props;
   const map = useMap();
 
   useEffect(() => {
@@ -37,12 +47,22 @@ function FitMapToData({ data }: { data: FeatureCollection }) {
   return null;
 }
 
+/** Defines geometry map properties. */
 type Props = {
+  /** Source geometries displayed on the map. */
   items: StoredGeometry[];
+  /** Optional computed geometry. */
   result: Feature | null;
 };
 
-export function GeometryMap({ items, result }: Props) {
+/**
+ * Displays source and computed geometries on Leaflet.
+ *
+ * @param props Map features and result.
+ * @returns Interactive map.
+ */
+export function GeometryMap(props: Props): ReactElement {
+  const { items, result } = props;
   const displayedData = useMemo(
     () =>
       featureCollection([

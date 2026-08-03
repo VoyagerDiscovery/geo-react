@@ -1,12 +1,27 @@
 import { feature } from "@turf/turf";
 import type { Feature, Geometry, Position } from "geojson";
 
+/** Represents an unvalidated JSON object. */
 type JsonObject = Record<string, unknown>;
 
+/**
+ * Checks whether a value is a JSON object.
+ *
+ * @param value Value to inspect.
+ * @returns Object validation result.
+ */
 function isObject(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/**
+ * Validates one GeoJSON position.
+ *
+ * @param value Position candidate.
+ * @param context Error location.
+ * @returns Nothing.
+ * @throws When coordinates are invalid.
+ */
 function assertPosition(
   value: unknown,
   context: string,
@@ -23,6 +38,15 @@ function assertPosition(
   }
 }
 
+/**
+ * Validates a position sequence.
+ *
+ * @param value Sequence candidate.
+ * @param context Error location.
+ * @param minimum Minimum position count.
+ * @returns Nothing.
+ * @throws When positions are invalid.
+ */
 function assertLine(value: unknown, context: string, minimum = 2): void {
   if (!Array.isArray(value) || value.length < minimum) {
     throw new Error(`${context} doit contenir au moins ${minimum} positions.`);
@@ -32,6 +56,14 @@ function assertLine(value: unknown, context: string, minimum = 2): void {
   );
 }
 
+/**
+ * Validates a closed polygon ring.
+ *
+ * @param value Ring candidate.
+ * @param context Error location.
+ * @returns Nothing.
+ * @throws When the ring is invalid.
+ */
 function assertRing(value: unknown, context: string): void {
   assertLine(value, context, 4);
   const ring = value as Position[];
@@ -48,6 +80,14 @@ function assertRing(value: unknown, context: string): void {
   }
 }
 
+/**
+ * Validates a GeoJSON geometry recursively.
+ *
+ * @param value Geometry candidate.
+ * @param context Error location.
+ * @returns Validated geometry.
+ * @throws When geometry structure is invalid.
+ */
 function validateGeometry(value: unknown, context: string): Geometry {
   if (!isObject(value) || typeof value.type !== "string") {
     throw new Error(`${context} ne contient pas de géométrie GeoJSON valide.`);
@@ -118,6 +158,14 @@ function validateGeometry(value: unknown, context: string): Geometry {
   return value as unknown as Geometry;
 }
 
+/**
+ * Validates and rebuilds one GeoJSON feature.
+ *
+ * @param value Feature candidate.
+ * @param context Error location.
+ * @returns Validated feature.
+ * @throws When feature structure is invalid.
+ */
 function validateFeature(value: unknown, context: string): Feature {
   if (!isObject(value) || value.type !== "Feature") {
     throw new Error(`${context} n'est pas une Feature GeoJSON.`);
@@ -136,6 +184,13 @@ function validateFeature(value: unknown, context: string): Feature {
   };
 }
 
+/**
+ * Parses and normalizes a GeoJSON document.
+ *
+ * @param value User-provided JSON document.
+ * @returns Validated features.
+ * @throws When JSON or GeoJSON is invalid.
+ */
 export function parseGeoJson(value: string): Feature[] {
   let parsed: unknown;
 
