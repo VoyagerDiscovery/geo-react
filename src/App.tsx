@@ -57,7 +57,7 @@ function App() {
       <aside className="sidebar">
         <header>
           <p className="eyebrow">Air Navigation SA · Projet technique</p>
-          <h1>Geo Composer</h1>
+          <h1>Geo-react</h1>
           <p className="intro">
             Importez, comparez et combinez des géométries GeoJSON.
           </p>

@@ -1,4 +1,4 @@
-# Geo Composer
+# Geo-react
 
 Application web React permettant d'importer, valider, afficher et composer des géométries GeoJSON sur une carte interactive.
 
