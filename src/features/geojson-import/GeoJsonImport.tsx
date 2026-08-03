@@ -11,8 +11,14 @@ type Props = {
   onMessage: (message: string) => void;
 };
 
+/** Maximum accepted file size in mebibytes. */
+const MAX_FILE_SIZE_MIB = 5;
+
+/** Number of bytes in one mebibyte. */
+const BYTES_PER_MIB = 1024 * 1024;
+
 /** Maximum accepted file size in bytes. */
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MIB * BYTES_PER_MIB;
 
 /**
  * Imports GeoJSON from files or text.
@@ -52,7 +58,9 @@ export function GeoJsonImport(props: Props): ReactElement {
 
     try {
       if (file.size > MAX_FILE_SIZE) {
-        throw new Error("Le fichier dépasse la taille maximale de 5 Mo.");
+        throw new Error(
+          `Le fichier dépasse la taille maximale de ${MAX_FILE_SIZE_MIB} Mo.`,
+        );
       }
       const sourceName = file.name.replace(/\.(geojson|json|txt)$/i, "");
       onImport(parseGeoJson(await file.text()), sourceName);

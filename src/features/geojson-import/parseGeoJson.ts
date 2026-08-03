@@ -4,6 +4,15 @@ import type { Feature, Geometry, Position } from "geojson";
 /** Represents an unvalidated JSON object. */
 type JsonObject = Record<string, unknown>;
 
+/** Minimum coordinate count for one GeoJSON position. */
+const MIN_POSITION_COORDINATES = 2;
+
+/** Minimum position count for one GeoJSON line. */
+const MIN_LINE_POSITIONS = 2;
+
+/** Minimum position count for one closed polygon ring. */
+const MIN_RING_POSITIONS = 4;
+
 /**
  * Checks whether a value is a JSON object.
  *
@@ -28,7 +37,7 @@ function assertPosition(
 ): asserts value is Position {
   if (
     !Array.isArray(value) ||
-    value.length < 2 ||
+    value.length < MIN_POSITION_COORDINATES ||
     !value.every(
       (coordinate) =>
         typeof coordinate === "number" && Number.isFinite(coordinate),
@@ -47,7 +56,11 @@ function assertPosition(
  * @returns Nothing.
  * @throws When positions are invalid.
  */
-function assertLine(value: unknown, context: string, minimum = 2): void {
+function assertLine(
+  value: unknown,
+  context: string,
+  minimum = MIN_LINE_POSITIONS,
+): void {
   if (!Array.isArray(value) || value.length < minimum) {
     throw new Error(`${context} doit contenir au moins ${minimum} positions.`);
   }
@@ -65,7 +78,7 @@ function assertLine(value: unknown, context: string, minimum = 2): void {
  * @throws When the ring is invalid.
  */
 function assertRing(value: unknown, context: string): void {
-  assertLine(value, context, 4);
+  assertLine(value, context, MIN_RING_POSITIONS);
   const ring = value as Position[];
   const first = ring[0]!;
   const last = ring[ring.length - 1]!;

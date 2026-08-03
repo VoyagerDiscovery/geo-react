@@ -2,6 +2,9 @@ import { difference, featureCollection, intersect, union } from "@turf/turf";
 import type { Feature } from "geojson";
 import type { GeometryOperation, PolygonFeature } from "../../types/geometry";
 
+/** Minimum feature count required by every geometry operation. */
+const MIN_OPERATION_FEATURES = 2;
+
 /**
  * Narrows a feature to a polygon feature.
  *
@@ -33,7 +36,7 @@ export function calculateGeometry(
   features: Feature[],
   operation: GeometryOperation,
 ): PolygonFeature | null {
-  if (features.length < 2) {
+  if (features.length < MIN_OPERATION_FEATURES) {
     throw new Error("Sélectionnez au moins deux géométries.");
   }
 

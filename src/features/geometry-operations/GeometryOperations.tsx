@@ -4,6 +4,9 @@ import type { Feature } from "geojson";
 import type { GeometryOperation, StoredGeometry } from "../../types/geometry";
 import { calculateGeometry } from "./calculateGeometry";
 
+/** Minimum feature count required by every geometry operation. */
+const MIN_OPERATION_FEATURES = 2;
+
 /** Defines geometry operation panel properties. */
 type Props = {
   /** Geometries available for calculations. */
@@ -80,7 +83,7 @@ export function GeometryOperations(props: Props): ReactElement {
           className="primary"
           type="button"
           onClick={runOperation}
-          disabled={selectedIds.length < 2}
+          disabled={selectedIds.length < MIN_OPERATION_FEATURES}
         >
           Calculer
         </button>

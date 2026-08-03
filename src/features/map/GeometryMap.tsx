@@ -26,6 +26,18 @@ const RESULT_STYLE: PathOptions = {
   dashArray: "7 5",
 };
 
+/** Initial map center over Switzerland. */
+const INITIAL_MAP_CENTER: [number, number] = [46.8, 8.23];
+
+/** Initial map zoom level. */
+const INITIAL_MAP_ZOOM = 8;
+
+/** Maximum automatic zoom level. */
+const MAX_FIT_ZOOM = 14;
+
+/** Map padding applied during automatic fitting. */
+const FIT_BOUNDS_PADDING: [number, number] = [32, 32];
+
 /**
  * Fits the map around supplied features.
  *
@@ -40,7 +52,10 @@ function FitMapToData(props: { data: FeatureCollection }): null {
     if (data.features.length === 0) return;
     const bounds = L.geoJSON(data).getBounds();
     if (bounds.isValid()) {
-      map.fitBounds(bounds, { padding: [32, 32], maxZoom: 14 });
+      map.fitBounds(bounds, {
+        padding: FIT_BOUNDS_PADDING,
+        maxZoom: MAX_FIT_ZOOM,
+      });
     }
   }, [data, map]);
 
@@ -77,7 +92,11 @@ export function GeometryMap(props: Props): ReactElement {
       <h2 id="map-title" className="sr-only">
         Carte des géométries
       </h2>
-      <MapContainer center={[46.8, 8.23]} zoom={8} zoomControl>
+      <MapContainer
+        center={INITIAL_MAP_CENTER}
+        zoom={INITIAL_MAP_ZOOM}
+        zoomControl
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
