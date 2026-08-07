@@ -75,7 +75,7 @@ export function GeoJsonImport(props: Props): ReactElement {
 
   return (
     <section className="panel">
-      <h2>1. Importer</h2>
+      <h2>Importer du GeoJSON</h2>
       <label className="file-input">
         Choisir un fichier
         <input

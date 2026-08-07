@@ -19,7 +19,8 @@ Une fois GitHub Pages activé, l'application est disponible à l'adresse suivant
 - Union, intersection et soustraction de polygones avec Turf.js.
 - Affichage distinct du résultat.
 - Recentrage automatique de la carte.
-- Messages compréhensibles en cas d'erreur.
+- Dessin de polygones directement sur la carte.
+- Messages compréhensibles en cas d’erreur.
 - Interface adaptée aux écrans mobiles et à la navigation au clavier.
 
 ## Installation
@@ -95,6 +96,7 @@ index.html
         │   ├── GeometryOperations.tsx
         │   └── calculateGeometry.ts
         ├── features/map/
+        │   ├── DrawingControls.tsx
         │   └── GeometryMap.tsx
         └── types/geometry.ts
 ```
@@ -364,6 +366,10 @@ Le composant retourne `null` car il exécute un effet sans créer d'élément vi
 `useMemo` construit une collection contenant les objets sources et le résultat. `MapContainer` initialise la carte au centre de la Suisse. `TileLayer` fournit les tuiles OpenStreetMap avec l'attribution obligatoire. Chaque objet devient une couche `GeoJSON`. Le résultat reçoit une clé dépendant de sa géométrie pour forcer React-Leaflet à recréer la couche lorsqu'il change.
 
 La légende du résultat est rendue uniquement lorsque celui-ci existe.
+
+### `features/map/DrawingControls.tsx`
+
+Ce composant configure Leaflet-Geoman et ajoute uniquement l'outil de dessin polygonal. Les auto-intersections sont interdites. Lorsqu'un dessin est terminé, la couche temporaire est convertie en Feature GeoJSON, retirée de Leaflet, puis transmise à `App`. Elle rejoint ainsi la liste, la palette et les opérations Turf comme une géométrie importée.
 
 ### `src/index.css`
 

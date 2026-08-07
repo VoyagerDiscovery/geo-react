@@ -6,6 +6,7 @@ import L from "leaflet";
 import { GeoJSON, MapContainer, TileLayer, useMap } from "react-leaflet";
 import type { PathOptions } from "leaflet";
 import type { StoredGeometry } from "../../types/geometry";
+import { DrawingControls } from "./DrawingControls";
 
 /** Source geometry layer styles. */
 const LAYER_STYLES: PathOptions[] = [
@@ -68,6 +69,8 @@ type Props = {
   items: StoredGeometry[];
   /** Optional computed geometry. */
   result: Feature | null;
+  /** Adds one polygon drawn by the user. */
+  onDraw: (feature: Feature) => void;
 };
 
 /**
@@ -77,7 +80,7 @@ type Props = {
  * @returns Interactive map.
  */
 export function GeometryMap(props: Props): ReactElement {
-  const { items, result } = props;
+  const { items, result, onDraw } = props;
   const displayedData = useMemo(
     () =>
       featureCollection([
@@ -101,6 +104,7 @@ export function GeometryMap(props: Props): ReactElement {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <DrawingControls onDraw={onDraw} />
         {items.map((item) => (
           <GeoJSON
             key={item.id}

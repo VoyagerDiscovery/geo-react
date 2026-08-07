@@ -63,7 +63,7 @@ export function GeometryOperations(props: Props): ReactElement {
 
   return (
     <section className="panel">
-      <h2>3. Composer</h2>
+      <h2>Composer</h2>
       <div className="operation-row">
         <label className="sr-only" htmlFor="geometry-operation">
           Opération géométrique

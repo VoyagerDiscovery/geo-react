@@ -24,7 +24,7 @@ export function GeometryList(props: Props): ReactElement {
   return (
     <section className="panel geometry-panel">
       <div className="section-title">
-        <h2>2. Sélectionner</h2>
+        <h2>Figures</h2>
         <span
           aria-label={`${items.length} géométrie${items.length > 1 ? "s" : ""}`}
         >
